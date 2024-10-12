@@ -1,6 +1,6 @@
  import {Ship} from "./ships";
 
- function gameboard() {
+ function gameboard(player) {
     const rowlength = 10;
     const columnlength = 10;
     let board = []
@@ -11,9 +11,11 @@
        }
        board.push(row);
     }
+    createShips();
     //empty spaces will be 0, ships will be ones, and hit spots will be 2
 
     function placeShip(ship, direction, row, column){
+        ship.orientation = direction;
         if (direction === "vertical"){
             for(let i = 0; i < ship.length; i++){
                 board[i + row][column] = ship;
@@ -26,7 +28,7 @@
         } 
     }
     
-    const createShips = () => {
+    function createShips() {
         const carrier = new Ship(5, "carrier");
         const battleship = new Ship(4, "battleship");
         const cruiser = new Ship(3, "cruiser");
@@ -44,13 +46,19 @@
         
     }
 
-    createShips();
+    
 
     const receiveAttack = () => {
         
     }
+
+    return {
+        player: player
+
+    };
  }
 
- gameboard();
-
+ const player1 = gameboard('cpu');
+ player1;
+//functions that will be tested: receive attack, moveship
  
