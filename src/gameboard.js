@@ -71,7 +71,6 @@ function gameboard(player) {
  }
 
  const player1 = gameboard('cpu');
- player1;
 
 //functions that will be tested: receive attack, moveship
-module.exports = player1;
+module.exports = {player1, gameboard};

@@ -7,5 +7,9 @@ class Players {
     }
 }
 
-const playerOne = new Players(person);
+module.exports = Players;
+
+const playerOne = new Players(real);
 const cpu = new Players(bot);
+
+playerOne.playerBoard
