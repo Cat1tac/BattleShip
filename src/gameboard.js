@@ -2,6 +2,7 @@
 
  //multiple gameboards will be created
 function gameboard(player) {
+    let shipAmount = 5;
     const rowlength = 10;
     const columnlength = 10;
     let board = []
@@ -13,7 +14,7 @@ function gameboard(player) {
        board.push(row);
     }
     createShips();
-    //empty spaces will be 0, ships will be ones, and hit spots will be 2
+    //empty spaces will be 0, hit ships will be 1, missed spots will be 2
 
     function placeShip(ship, direction, row, column){
         ship.orientation = direction;
@@ -41,16 +42,29 @@ function gameboard(player) {
         placeShip(cruiser, "vertical", 3, 5);
         placeShip(submarine, "horizontal", 7, 1);
         placeShip(destroyer, "vertical", 6, 8);
+    }
 
-        console.log(board)
+    function checkSunkShips(ship){
+        if(ship){
+            shipAmount--;
+            if(shipAmount === 0){
+                console.log("player x won");
+            }
+        }
     }
 
     return {
         player: player,
         receiveAttack: function(r,c) {
             if(typeof board[r][c] === "object"){
+                console.log("hit!");
+                board[r][c].hit();
+                checkSunkShips(board[r][c]);
+                board[r][c] = 1;
                 return true;
             }
+            board[r][c] = 2;
+            console.log("missed shot");
             return false;
         }
     };
