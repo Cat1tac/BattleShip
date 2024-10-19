@@ -1,5 +1,6 @@
  import {Ship} from "./ships";
 
+ //multiple gameboards will be created
  function gameboard(player) {
     const rowlength = 10;
     const columnlength = 10;

@@ -6,10 +6,15 @@ export class Ship {
     }
 
     hit(){
-
+        let attacked = 0;
+        attacked++;
+        return attacked;
     }
 
     isSunk(){
-
+        if (this.hit === this.length){
+            return true
+        }
+        return false;
     }
 }
