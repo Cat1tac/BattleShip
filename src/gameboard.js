@@ -55,6 +55,7 @@ function gameboard(player) {
 
     return {
         player: player,
+        board,
         receiveAttack: function(r,c) {
             if(typeof board[r][c] === "object"){
                 console.log("hit!");
@@ -70,7 +71,5 @@ function gameboard(player) {
     };
  }
 
- const player1 = gameboard('cpu');
-
 //functions that will be tested: receive attack, moveship
-module.exports = {player1, gameboard};
+module.exports = gameboard;
