@@ -1,7 +1,7 @@
- import {Ship} from "./ships";
+ const Ship = require ("./ships");
 
  //multiple gameboards will be created
- function gameboard(player) {
+function gameboard(player) {
     const rowlength = 10;
     const columnlength = 10;
     let board = []
@@ -42,24 +42,22 @@
         placeShip(submarine, "horizontal", 7, 1);
         placeShip(destroyer, "vertical", 6, 8);
 
-        
-        console.log(board);
-        
-    }
-
-    
-
-    const receiveAttack = () => {
-        
+        console.log(board)
     }
 
     return {
-        player: player
-
+        player: player,
+        receiveAttack: function(r,c) {
+            if(typeof board[r][c] === "object"){
+                return true;
+            }
+            return false;
+        }
     };
  }
 
  const player1 = gameboard('cpu');
  player1;
+
 //functions that will be tested: receive attack, moveship
- 
+module.exports = player1;

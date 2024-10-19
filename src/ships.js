@@ -1,4 +1,4 @@
-export class Ship {
+class Ship {
     constructor(length, name, orientation){
         this.length = length;
         this.name = name;
@@ -18,3 +18,5 @@ export class Ship {
         return false;
     }
 }
+
+module.exports = Ship
