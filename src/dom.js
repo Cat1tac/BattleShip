@@ -1,3 +1,4 @@
+import { forEach } from "lodash";
 import "./styles.css"
 const Players = require("./players");
 
@@ -8,13 +9,41 @@ domBoard();
 function domBoard(){
     //player one board
     const playerSide = document.querySelector('.playerSide');
-    console.log(playerOne.playerBoard.board);
-
     createBoard(playerOne.playerBoard.board, playerSide);
+
+
 
     //enemy side
     const enemySide = document.querySelector('.enemySide');
     createBoard(cpu.playerBoard.board, enemySide);
+
+    moveDomShip();
+
+}
+
+function moveDomShip(){
+    const ships = document.querySelectorAll('.ship');
+    let offsetX
+    let offsetY
+
+    ships.forEach(ship => {
+        const move = (e) => {
+            ship.style.left = `${e.clientX - offsetX}px`;
+            ship.style.top = `${e.clientY - offsetY}px`;
+        }
+
+        ship.addEventListener("mousedown", (e) => {
+            console.log("idk");
+            offsetX = e.clientX - ship.offsetLeft;
+            offsetY = e.clientY - ship.offsetTop;
+            document.addEventListener("mousemove", move);
+        });
+
+        document.addEventListener("mouseup", () => {
+            document.removeEventListener("mousemove", move);
+        });
+    });
+
 
 }
 
