@@ -10,24 +10,37 @@ function domBoard(){
     const playerSide = document.querySelector('.playerSide');
     console.log(playerOne.playerBoard.board);
 
-    const playerBattlefield = document.createElement('table');
-    playerBattlefield.classList.add('battlefield');
+    createBoard(playerOne.playerBoard.board, playerSide);
 
-    for(let r = 0; r < playerOne.playerBoard.board.length; r++){
+    //enemy side
+    const enemySide = document.querySelector('.enemySide');
+    createBoard(cpu.playerBoard.board, enemySide);
+
+}
+
+function createBoard(board, side){
+    const battlefield = document.createElement('table');
+    battlefield.classList.add('battlefield');
+
+    for(let r = 0; r < board.length; r++){
         const battlefieldRow = document.createElement('tr');
         battlefieldRow.classList.add('battlefieldRow');
 
-        for(let c = 0; c < playerOne.playerBoard.board[r].length; c++){
+        for(let c = 0; c < board[r].length; c++){
             const battlefieldCell = document.createElement('td')
             battlefieldCell.classList.add('battlefieldCell');
-            battlefieldCell.classList.add('battlefieldCell_empty');
+            battlefieldCell.dataset.x = r;
+            battlefieldCell.dataset.y = c;
 
+            if(board[r][c] !== 0){
+                battlefieldCell.classList.add('battlefieldCell_ship');
+            } else {
+                battlefieldCell.classList.add('battlefieldCell_empty');
+            }
+    
             battlefieldRow.appendChild(battlefieldCell);
         }
-        playerBattlefield.appendChild(battlefieldRow);
+        battlefield.appendChild(battlefieldRow);
     }
-    playerSide.appendChild(playerBattlefield);
-
-    //enemy side
-    const enemySide = document.querySelector('.enemySide')
+    side.appendChild(battlefield);
 }

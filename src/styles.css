@@ -1,12 +1,24 @@
 *{
     background-color: aqua;
+    margin: 0;
+}
+
+.gameArea {
+    margin: 20px;
+    display: flex;
+    gap: 50px;
 }
 
 .battlefield {
     height: 500px;
     width: 500px;
+    border-collapse: collapse;
 }
 
 .battlefieldCell {
     border: 1px solid black;
+}
+
+.battlefieldCell_ship {
+    background-color: darkblue;
 }
