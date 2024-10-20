@@ -1,6 +1,7 @@
 *{
     background-color: aqua;
     margin: 0;
+    padding: 0;
 }
 
 .gameArea {
@@ -10,8 +11,8 @@
 }
 
 .battlefield {
-    height: 500px;
-    width: 500px;
+    min-height: 340px;
+    min-width: 340px;
     border-collapse: collapse;
 }
 
@@ -19,6 +20,10 @@
     border: 1px solid black;
 }
 
-.battlefieldCell_ship {
+.ship {
     background-color: darkblue;
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    
 }
