@@ -59,8 +59,7 @@ function gameboard(player) {
         receiveAttack: function(r,c) {
             if(typeof board[r][c] === "object"){
                 console.log("hit!");
-                board[r][c].hit();
-                checkSunkShips(board[r][c]);
+                checkSunkShips(board[r][c].isSunk());
                 board[r][c] = 1;
                 return true;
             }
