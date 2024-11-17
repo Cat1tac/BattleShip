@@ -3,6 +3,7 @@ const Players = require("./players");
 
 const playerOne = new Players("real");
 const cpu = new Players("bot");
+let moves = [];
 
 domBoard();
 function domBoard(){
@@ -18,18 +19,48 @@ function domBoard(){
 
     //moveActualShip(playerOne.playerBoard.board);
     //moveDomShip();
-    hitShip();
+    playerTurn();
 }
 
-function hitShip(){
-    const cells = document.querySelectorAll('.enemySide > * > * > *');
-    cells.forEach(cell => {
+function playerTurn(){
+    const enemyCells = document.querySelectorAll('.enemySide > * > * > *');
+    enemyCells.forEach(cell => {
         cell.addEventListener("click", () => {
             const x = cell.dataset.x;
             const y = cell.dataset.y;
-            cpu.playerBoard.receiveAttack(x,y);
+            if(cpu.playerBoard.receiveAttack(x,y)) {
+                //if hit ship
+                cell.classList.add("hitSpot");
+                cell.removeChild(cell.firstChild);
+            } else {
+                //if missed ship
+                cell.classList.add("missedSpot");
+            }
+            botTurn();
         });
     });
+}
+
+function botTurn(){
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+
+    if(moves.includes(cell)){
+        botTurn();
+    }
+
+    if(playerOne.playerBoard.receiveAttack(x,y)){
+        //if hit ship
+        cell.classList.add("hitSpot");
+        cell.removeChild(cell.firstChild);
+    } else {
+        //if missed ship
+        if(!cell.classList.contains("hitSpot")){
+            cell.classList.add("missedSpot");
+        }   
+    }
+    moves.push(cell); 
 }
 
 function moveActualShip(board){
@@ -180,9 +211,10 @@ function createBoard(board, side){
 /* Everything i need to do
 - Find someway to make ships snap in place (skip for now)
 - make js follow the dom
-- make it so players can actually hit ships
+- make it so players can actually hit ships (done)
 - add a "start game" button so players can setup board then actually play
 - make it so the bot can actually play the game 
-- add winn/lose screen once all players ships have been destroyed
+- hide enemy board
+- add win/lose screen once all players ships have been destroyed
 - improve UX
 */

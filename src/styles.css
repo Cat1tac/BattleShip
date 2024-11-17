@@ -34,3 +34,13 @@
     width: 2em;
     height: 2em;
 }
+
+.hitSpot {
+    pointer-events: none;
+    background-color: purple;;
+}
+
+.missedSpot {
+    pointer-events: none;
+    background-color: green;
+}
