@@ -8,7 +8,13 @@ let moves = [];
 setupBoard();
 const startGamebutton = document.getElementById("startGame");
 startGamebutton.addEventListener("click", () => {
+    const playerSide = document.querySelector(".playerSide");
+    playerSide.style.pointerEvents = "none";
 
+    const enemySide = document.querySelector('.enemySide');
+    enemySide.style.pointerEvents = "auto";
+
+    playerTurn();
 });
 
 function setupBoard(){
@@ -20,11 +26,11 @@ function setupBoard(){
 
     //enemy side
     const enemySide = document.querySelector('.enemySide');
+    enemySide.style.pointerEvents = "none";
     createBoard(cpu.playerBoard.board, enemySide);
 
     //moveActualShip(playerOne.playerBoard.board);
     //moveDomShip();
-    playerTurn();
 }
 
 function moveShipPointClick(){
@@ -79,7 +85,7 @@ function moveShipPointClick(){
                 playerShips.forEach(ship => {
                     ship.style.pointerEvents = "auto";
                 });
-                
+
                 cell.onclick = null;
             };
         });
@@ -127,62 +133,6 @@ function botTurn(){
     moves.push(cell); 
 }
 
-function moveActualShip(board){
-    const ships = document.querySelectorAll('.playerSide > * > * > * > .ship');
-    ships.forEach(ship => {
-        ship.addEventListener("mousedown", () => {
-            console.log(ship.id);
-            board[ship.parentNode.dataset.x][ship.parentNode.dataset.y];
-        });
-    });
-    
-
-}
-
-
-function moveDomShip(){
-    const ships = document.querySelectorAll('.playerSide > * > * > * > .ship');
-    let offsetX;
-    let offsetY;
-
-    ships.forEach(ship => {
-        snapToBoard(ship);
-        //movement of ship
-        const move = (e) => {
-            ship.style.left = `${e.clientX - offsetX}px`;
-            ship.style.top = `${e.clientY - offsetY}px`;
-        }
-
-        ship.addEventListener("mousedown", (e) => {
-            offsetX = e.clientX - ship.offsetLeft;
-            offsetY = e.clientY - ship.offsetTop;
-            console.log(`Ship ${ship.offsetLeft} ${ship.offsetTop}`);
-            document.addEventListener("mousemove", move);
-        });
-
-        document.addEventListener("mouseup", () => {
-            document.removeEventListener("mousemove", move);
-
-        });
-    });
-}
-
-function snapToBoard(ship){
-    const cells = document.querySelectorAll('.battlefieldCell');
-
-    cells.forEach(cell => {
-        cell.addEventListener("mousedown", () => {
-            console.log(`Cell X: ${cell.offsetLeft} Y: ${cell.offsetTop}`);
-            console.log(`${cell.offsetLeft + 34} > ${ship.offsetLeft} >= ${cell.offsetLeft}`)
-            if(cell.offsetLeft + 34 > ship.offsetLeft >= cell.offsetLeft && cell.offsetTop + 34 > ship.offsetTop >= cell.offsetTop){
-                cell.style.background = "purple";
-            }
-                
-        });
-    });
-    //find how to get ship offset and cell offset when ship is hovering over the cell
-}
-
 function createBoard(board, side){
     const battlefield = document.createElement('table');
     battlefield.classList.add('battlefield');
@@ -215,28 +165,6 @@ function createBoard(board, side){
     
                 battlefieldCell.classList.add('battlefieldCell_busy');
                 
-               /*
-                if(findShip(r,c)){
-                    battlefieldCell.classList.add('battlefieldCell_busy');
-                } else {
-                    const shipLocation = document.createElement('div');
-                    shipLocation.classList.add('ship');
-                    shipLocation.dataset.length = board[r][c].length;
-                    if (board[r][c].orientation === "vertical"){
-
-                        shipLocation.dataset.position = 'v';
-                        shipLocation.style.height = (2 * shipLocation.dataset.length + 0.4) + "em";
-                    } else {
-
-                        shipLocation.dataset.position = 'h';
-                        shipLocation.style.width = (2 * shipLocation.dataset.length + 0.4) + "em";
-                    }
-                    
-                    battlefieldCell.appendChild(shipLocation);
-    
-                    battlefieldCell.classList.add('battlefieldCell_busy');
-                }
-                */
             } else {
                 battlefieldCell.classList.add('battlefieldCell_empty');
             }
@@ -271,9 +199,9 @@ function createBoard(board, side){
 }
 
 /* Everything i need to do
-- Find someway to make ships snap in place (skip for now)
-- allow players to place ships and randomize where bot places its ships
-- make js follow the dom (basically done)
+- Throw an error when ship is placed in an illegal position
+- Let players change ship orientation
+- randomize where bot places its ships
 - add a "start game" button so players can setup board then actually play
 - hide enemy board
 - add win/lose screen once all players ships have been destroyed
