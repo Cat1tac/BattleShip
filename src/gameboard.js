@@ -66,9 +66,22 @@ function gameboard(player) {
             board[r][c] = 2;
             console.log("missed shot");
             return false;
+        },
+        moveShip: function(lr, lc, nr, nc) {
+            const previous = board[lr][lc];
+            if(previous.orientation === "vertical"){
+                for(let i = 0; i < previous.length; i++){
+                    board[nr + i][nc] = previous;
+                    board[lr + i][lc] = 0;
+                }
+            } else {
+                for(let i = 0; i < previous.length; i++){
+                    board[nr][nc + i] = previous;
+                    board[lr][lc + i] = 0;
+                }
+            }
         }
     };
  }
-
 //functions that will be tested: receive attack, moveship
 module.exports = gameboard;

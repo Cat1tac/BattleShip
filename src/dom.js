@@ -5,12 +5,17 @@ const playerOne = new Players("real");
 const cpu = new Players("bot");
 let moves = [];
 
-domBoard();
-function domBoard(){
+setupBoard();
+const startGamebutton = document.getElementById("startGame");
+startGamebutton.addEventListener("click", () => {
+
+});
+
+function setupBoard(){
     //player one board
     const playerSide = document.querySelector('.playerSide');
     createBoard(playerOne.playerBoard.board, playerSide);
-
+    moveShipPointClick();
 
 
     //enemy side
@@ -20,6 +25,65 @@ function domBoard(){
     //moveActualShip(playerOne.playerBoard.board);
     //moveDomShip();
     playerTurn();
+}
+
+function moveShipPointClick(){
+    const playerShips = document.querySelectorAll(".playerSide > * > * > * > .ship");
+    playerShips.forEach(ship => {
+        //Highlight Ships
+        ship.addEventListener("mouseenter", () => {
+            document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`).forEach(wholeShip => {
+                wholeShip.style.borderColor = "purple";
+            });
+        });
+        ship.addEventListener("mouseleave", () => {
+            document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`).forEach(wholeShip => {
+                wholeShip.style.borderColor = "rgb(73, 0, 0)";
+            });   
+        });
+
+        //Click on Ships
+        ship.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const wholeShip = document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`);
+            const x = parseInt(wholeShip[0].parentElement.dataset.x);
+            const y = parseInt(wholeShip[0].parentElement.dataset.y);
+            
+            cellsActive(wholeShip, x, y);
+        });
+    });
+
+    function cellsActive(ships, x, y){
+        const playerCells = document.querySelectorAll(".playerSide > * > * > *");
+        playerCells.forEach(cell => {
+            cell.style.pointerEvents = "auto";
+            cell.onclick = function(){
+                const newX = parseInt(cell.dataset.x)
+                const newY = parseInt(cell.dataset.y)
+                playerOne.playerBoard.moveShip(x, y, newX, newY);
+                if(ships[0].dataset.position === "v"){
+                    for(let i = 0; i < ships.length; i++){
+                        document.querySelector(`[data-x="${newX + i}"][data-y="${newY}"]`).appendChild(ships[i]);
+                    }
+                } else {
+                    for(let i = 0; i < ships.length; i++){
+                        document.querySelector(`[data-x="${newX}"][data-y="${newY + i}"]`).appendChild(ships[i]);
+                    }
+                }
+                
+                playerCells.forEach(cell => {
+                    cell.style.pointerEvents = "none";
+                });
+
+                const playerShips = document.querySelectorAll(".playerSide > * > * > * > .ship");
+                playerShips.forEach(ship => {
+                    ship.style.pointerEvents = "auto";
+                });
+                
+                cell.onclick = null;
+            };
+        });
+    }
 }
 
 function playerTurn(){
@@ -142,10 +206,8 @@ function createBoard(board, side){
                 shipLocation.dataset.length = board[r][c].length;
                 shipLocation.id = board[r][c].name;
                 if (board[r][c].orientation === "vertical"){
-                    shipLocation.classList.add('ship_v');
                     shipLocation.dataset.position = 'v';
                 } else {
-                    shipLocation.classList.add('ship_h');
                     shipLocation.dataset.position = 'h';
                 }
 
@@ -161,11 +223,11 @@ function createBoard(board, side){
                     shipLocation.classList.add('ship');
                     shipLocation.dataset.length = board[r][c].length;
                     if (board[r][c].orientation === "vertical"){
-                        shipLocation.classList.add('ship_v');
+
                         shipLocation.dataset.position = 'v';
                         shipLocation.style.height = (2 * shipLocation.dataset.length + 0.4) + "em";
                     } else {
-                        shipLocation.classList.add('ship_h');
+
                         shipLocation.dataset.position = 'h';
                         shipLocation.style.width = (2 * shipLocation.dataset.length + 0.4) + "em";
                     }
@@ -210,10 +272,9 @@ function createBoard(board, side){
 
 /* Everything i need to do
 - Find someway to make ships snap in place (skip for now)
-- make js follow the dom
-- make it so players can actually hit ships (done)
+- allow players to place ships and randomize where bot places its ships
+- make js follow the dom (basically done)
 - add a "start game" button so players can setup board then actually play
-- make it so the bot can actually play the game 
 - hide enemy board
 - add win/lose screen once all players ships have been destroyed
 - improve UX
