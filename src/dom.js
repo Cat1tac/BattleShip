@@ -64,16 +64,17 @@ function moveShipPointClick(){
         playerCells.forEach(cell => {
             cell.style.pointerEvents = "auto";
             cell.onclick = function(){
-                const newX = parseInt(cell.dataset.x)
-                const newY = parseInt(cell.dataset.y)
-                playerOne.playerBoard.moveShip(x, y, newX, newY);
-                if(ships[0].dataset.position === "v"){
-                    for(let i = 0; i < ships.length; i++){
-                        document.querySelector(`[data-x="${newX + i}"][data-y="${newY}"]`).appendChild(ships[i]);
-                    }
-                } else {
-                    for(let i = 0; i < ships.length; i++){
-                        document.querySelector(`[data-x="${newX}"][data-y="${newY + i}"]`).appendChild(ships[i]);
+                const newX = parseInt(cell.dataset.x);
+                const newY = parseInt(cell.dataset.y);
+                if(playerOne.playerBoard.moveShip(x, y, newX, newY)){
+                    if(ships[0].dataset.position === "v"){
+                        for(let i = 0; i < ships.length; i++){
+                            document.querySelector(`[data-x="${newX + i}"][data-y="${newY}"]`).appendChild(ships[i]);
+                        }
+                    } else {
+                        for(let i = 0; i < ships.length; i++){
+                            document.querySelector(`[data-x="${newX}"][data-y="${newY + i}"]`).appendChild(ships[i]);
+                        }
                     }
                 }
                 

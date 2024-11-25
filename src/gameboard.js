@@ -71,15 +71,27 @@ function gameboard(player) {
             const previous = board[lr][lc];
             if(previous.orientation === "vertical"){
                 for(let i = 0; i < previous.length; i++){
+                    if(board[nr + i] === undefined || typeof board[nr + i][nc] === "object"){
+                        return false;
+                    }
+                }
+                for(let i = 0; i < previous.length; i++){
                     board[nr + i][nc] = previous;
                     board[lr + i][lc] = 0;
                 }
             } else {
                 for(let i = 0; i < previous.length; i++){
+                    if(typeof board[nr][nc + i] === "object" || board[nr][nc + i] === undefined){
+                        return false;
+                    }
+                }
+                for(let i = 0; i < previous.length; i++){
                     board[nr][nc + i] = previous;
                     board[lr][lc + i] = 0;
                 }
             }
+            console.log(board);
+            return true
         }
     };
  }
