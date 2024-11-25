@@ -90,8 +90,34 @@ function gameboard(player) {
                     board[lr][lc + i] = 0;
                 }
             }
+            return true;
+        },
+        rotateShip: function(r, c) {
+            if(board[r][c].orientation === "vertical"){
+                for(let i = 1; i < board[r][c].length; i++){
+                    if(board[r][c + i] === undefined || typeof board[r][c + i] === "object"){
+                        return false;
+                    }
+                }
+                for(let i = 1; i < board[r][c].length; i++){
+                    board[r + i][c] = 0;
+                    board[r][c + i] = board[r][c];
+                    board[r][c].orientation = "horizontal";
+                }
+            } else {
+                for(let i = 1; i < board[r][c].length; i++){
+                    if(board[r + i] === undefined || typeof board[r + i][c] === "object"){
+                        return false;
+                    }
+                }
+                for(let i = 1; i < board[r][c].length; i++){
+                    board[r][c + i] = 0;
+                    board[r + i][c] = board[r][c];
+                    board[r][c].orientation = "vertical";
+                }
+            }
             console.log(board);
-            return true
+            return true;
         }
     };
  }

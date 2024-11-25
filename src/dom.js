@@ -23,7 +23,6 @@ function setupBoard(){
     createBoard(playerOne.playerBoard.board, playerSide);
     moveShipPointClick();
 
-
     //enemy side
     const enemySide = document.querySelector('.enemySide');
     enemySide.style.pointerEvents = "none";
@@ -57,6 +56,32 @@ function moveShipPointClick(){
             
             cellsActive(wholeShip, x, y);
         });
+
+        ship.addEventListener("dblclick", (e) => {
+            e.stopPropagation();
+            const wholeShip = document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`);
+            const x = parseInt(wholeShip[0].parentElement.dataset.x);
+            const y = parseInt(wholeShip[0].parentElement.dataset.y);
+
+            if(playerOne.playerBoard.rotateShip(x, y)){
+                if(wholeShip[0].dataset.position === "v"){
+                    for(let i = 0; i < wholeShip.length; i++){
+                        //Nakes vertical ships horizontal in dom
+                        wholeShip[i].dataset.position = "h";
+                        document.querySelector(`[data-x="${x}"][data-y="${y + i}"]`).appendChild(wholeShip[i]);
+                    }
+                } else {
+                    for(let i = 0; i < wholeShip.length; i++){
+                        //updates vertical ships in dom
+                        wholeShip[i].dataset.position = "v";
+                        document.querySelector(`[data-x="${x + i}"][data-y="${y}"]`).appendChild(wholeShip[i]);
+                    }
+                }
+            } else {
+                //Notify player they cannot rotate their ship there
+            }
+            
+        });
     });
 
     function cellsActive(ships, x, y){
@@ -66,16 +91,22 @@ function moveShipPointClick(){
             cell.onclick = function(){
                 const newX = parseInt(cell.dataset.x);
                 const newY = parseInt(cell.dataset.y);
+
+                //updates ships in console
                 if(playerOne.playerBoard.moveShip(x, y, newX, newY)){
                     if(ships[0].dataset.position === "v"){
                         for(let i = 0; i < ships.length; i++){
+                            //updates vertical ships in dom
                             document.querySelector(`[data-x="${newX + i}"][data-y="${newY}"]`).appendChild(ships[i]);
                         }
                     } else {
                         for(let i = 0; i < ships.length; i++){
+                            //updates horizontal ships in dom
                             document.querySelector(`[data-x="${newX}"][data-y="${newY + i}"]`).appendChild(ships[i]);
                         }
                     }
+                } else {
+                    //Notify player they cannot move their ship there
                 }
                 
                 playerCells.forEach(cell => {
@@ -200,7 +231,6 @@ function createBoard(board, side){
 }
 
 /* Everything i need to do
-- Throw an error when ship is placed in an illegal position
 - Let players change ship orientation
 - randomize where bot places its ships
 - add a "start game" button so players can setup board then actually play
