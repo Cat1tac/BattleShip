@@ -1,3 +1,4 @@
+import Ship from "./ships";
 import "./styles.css"
 const Players = require("./players");
 
@@ -8,8 +9,10 @@ let moves = [];
 setupBoard();
 const startGamebutton = document.getElementById("startGame");
 startGamebutton.addEventListener("click", () => {
-    const playerSide = document.querySelector(".playerSide");
-    playerSide.style.pointerEvents = "none";
+    const playerShips = document.querySelectorAll(".playerSide > * > * > * > .ship");
+        playerShips.forEach(ship => {
+        ship.style.pointerEvents = "none";
+    });
 
     const enemySide = document.querySelector('.enemySide');
     enemySide.style.pointerEvents = "auto";
@@ -182,7 +185,7 @@ function createBoard(board, side){
             battlefieldCell.dataset.y = c;
 
             //places initial ship location
-            if(board[r][c] !== 0){
+            if(board[r][c] instanceof Ship){
                 const shipLocation = document.createElement('div');
                 shipLocation.classList.add('ship');
                 shipLocation.dataset.length = board[r][c].length;
@@ -206,34 +209,10 @@ function createBoard(board, side){
         battlefield.appendChild(battlefieldRow);
     }
     side.appendChild(battlefield);
-
-    function findShip(r,c){
-        //checks if a ship is already on the board
-        if(board[r][c].orientation === "vertical"){
-            for(let i = 0; i < board[r][c].length; i++){
-                if(board[r - 1][c].name === board[r][c].name){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            for(let i = 0; i < board[r][c].length; i++){
-                if(board[r][c - 1].name === board[r][c].name){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        
-    }
 }
 
 /* Everything i need to do
-- Let players change ship orientation
-- randomize where bot places its ships
-- add a "start game" button so players can setup board then actually play
+- Associate "1" with corresponding ship or figure out another way to move and rotate ships without 1's preventing it
 - hide enemy board
 - add win/lose screen once all players ships have been destroyed
 - improve UX
