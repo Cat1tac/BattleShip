@@ -7,6 +7,7 @@ const cpu = new Players("bot");
 let moves = [];
 
 setupBoard();
+
 const startGamebutton = document.getElementById("startGame");
 startGamebutton.addEventListener("click", () => {
     const playerShips = document.querySelectorAll(".playerSide > * > * > * > .ship");
@@ -19,6 +20,20 @@ startGamebutton.addEventListener("click", () => {
 
     playerTurn();
 });
+
+function gameOver(winner){
+    const winText = document.querySelector("h2");
+    if(winner === "player"){
+        winText.textContent = "Player Wins!";
+    } else {
+        winText.textContent = "CPU Wins!";
+    }
+
+    const enemyCells = document.querySelectorAll('.enemySide > * > * > *');
+    enemyCells.forEach(cell => {
+        cell.style.pointerEvents = "none";
+    });
+}
 
 function setupBoard(){
     //player one board
@@ -41,12 +56,12 @@ function moveShipPointClick(){
         //Highlight Ships
         ship.addEventListener("mouseenter", () => {
             document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`).forEach(wholeShip => {
-                wholeShip.style.borderColor = "purple";
+                wholeShip.classList.add("highlight");
             });
         });
         ship.addEventListener("mouseleave", () => {
             document.querySelectorAll(`.playerSide > * > * > * > #${ship.id}`).forEach(wholeShip => {
-                wholeShip.style.borderColor = "rgb(73, 0, 0)";
+                wholeShip.classList.remove("highlight");
             });   
         });
 
@@ -141,7 +156,12 @@ function playerTurn(){
                 //if missed ship
                 cell.classList.add("missedSpot");
             }
-            botTurn();
+
+            if(cpu.playerBoard.checkSunkShips(x,y)){
+                gameOver("player");
+            } else {
+                botTurn();
+            }
         });
     });
 }
@@ -166,6 +186,10 @@ function botTurn(){
         }   
     }
     moves.push(cell); 
+
+    if(playerOne.playerBoard.checkSunkShips(x,y)){
+        gameOver("cpu");
+    }
 }
 
 function createBoard(board, side){
@@ -212,7 +236,6 @@ function createBoard(board, side){
 }
 
 /* Everything i need to do
-- Associate "1" with corresponding ship or figure out another way to move and rotate ships without 1's preventing it
 - hide enemy board
 - add win/lose screen once all players ships have been destroyed
 - improve UX

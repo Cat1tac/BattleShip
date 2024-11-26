@@ -187,27 +187,27 @@ function gameboard(player) {
         }
     }
 
-    function checkSunkShips(ship){
-        if(ship){
-            shipAmount--;
-            if(shipAmount === 0){
-                console.log("player x won");
-            }
-        }
-    }
-
     return {
         player: player,
         board,
         receiveAttack: function(r,c) {
-            if(typeof board[r][c] === "object"){
-                console.log("hit!");
-                checkSunkShips(board[r][c].isSunk());
-                board[r][c] = 1;
+            if(board[r][c] instanceof Ship){
                 return true;
             }
             board[r][c] = 2;
-            console.log("missed shot");
+            return false;
+        },
+        checkSunkShips: function(r,c){
+            if(!(board[r][c] instanceof Ship)){
+                return false;
+            }
+            if(board[r][c].isSunk()){
+                shipAmount--;
+                if(shipAmount === 0){
+                    return true;
+                } 
+            }
+            board[r][c] = 1;
             return false;
         },
         moveShip: function(lr, lc, nr, nc) {

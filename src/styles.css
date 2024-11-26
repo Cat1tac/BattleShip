@@ -1,7 +1,20 @@
 *{
-    background-color: aqua;
+    background-color: rgb(45, 49, 49);
     margin: 0;
     padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    color: rgb(187, 187, 187);
+}
+
+.container {
+    margin: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .gameArea {
@@ -23,6 +36,10 @@
     height: 2em;
 }
 
+.enemySide > * > * > .battlefieldCell > .ship {
+    visibility: hidden;
+}
+
 .enemySide > * > * > .battlefieldCell:hover {
     border: 2px solid orange;
     
@@ -30,17 +47,33 @@
 
 .ship {
     background-color: darkblue;
-    border: 1px solid rgb(73, 0, 0);
+    border: 1px solid rgb(128, 128, 128);
     width: 2em;
     height: 2em;
 }
 
+.highlight{
+    border: 1px solid white;
+}
+
 .hitSpot {
     pointer-events: none;
-    background-color: purple;;
+    background-color: rgb(25, 109, 0);;
 }
 
 .missedSpot {
     pointer-events: none;
-    background-color: green;
+    background-color: rgb(114, 0, 0);
+}
+
+button {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(138, 138, 138);
+    height: 40px;
+    width: 160px;
+}
+
+button:hover {
+    color: white;
 }
